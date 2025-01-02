@@ -1,4 +1,5 @@
 """
+ASGI config for custom-auth-system project.
 Конфигурация ASGI для проекта custom-auth-system.
 """
 import os

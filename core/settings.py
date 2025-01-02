@@ -1,4 +1,5 @@
 """
+Django settings for custom-auth-system project.
 Настройки Django для проекта custom-auth-system.
 """
 import os

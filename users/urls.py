@@ -1,4 +1,5 @@
 """
+URLs for users app.
 URL-маршруты для приложения users.
 """
 from django.urls import path
@@ -14,4 +15,3 @@ urlpatterns = [
     path('profile/update/', views.UserUpdateView.as_view(), name='update-profile'),
     path('delete/', views.delete_user, name='delete-user'),
 ]
-

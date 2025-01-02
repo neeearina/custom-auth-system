@@ -1,4 +1,5 @@
 """
+Admin configuration for users app.
 Конфигурация админ-панели для приложения users.
 """
 from django.contrib import admin
@@ -9,7 +10,10 @@ from .models import User
 
 @admin.register(User)
 class UserAdmin(BaseUserAdmin):
-    """Интерфейс админ-панели для модели User."""
+    """
+    Admin interface for User model.
+    Интерфейс админ-панели для модели User.
+    """
     list_display = ('email', 'full_name', 'is_active', 'is_staff', 'date_joined')
     list_filter = ('is_active', 'is_staff', 'is_superuser', 'date_joined')
     search_fields = ('email', 'full_name')
@@ -31,4 +35,3 @@ class UserAdmin(BaseUserAdmin):
             'fields': ('email', 'full_name', 'password1', 'password2', 'is_staff', 'is_superuser'),
         }),
     )
-

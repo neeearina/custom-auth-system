@@ -1,4 +1,5 @@
 """
+Views for users app.
 Представления для приложения users.
 """
 from rest_framework import status, generics
@@ -19,13 +20,16 @@ from .serializers import (
 @api_view(['POST'])
 @permission_classes([AllowAny])
 def register(request):
-    """Endpoint для регистрации пользователя."""
+    """
+    User registration endpoint.
+    Endpoint для регистрации пользователя.
+    """
     serializer = UserRegistrationSerializer(data=request.data)
     if serializer.is_valid():
         user = serializer.save()
         token, created = Token.objects.get_or_create(user=user)
         return Response({
-            'message': 'Пользователь успешно зарегистрирован.',
+            'message': 'User registered successfully. / Пользователь успешно зарегистрирован.',
             'token': token.key,
             'user': UserProfileSerializer(user).data
         }, status=status.HTTP_201_CREATED)
@@ -35,13 +39,16 @@ def register(request):
 @api_view(['POST'])
 @permission_classes([AllowAny])
 def login(request):
-    """Endpoint для входа пользователя."""
+    """
+    User login endpoint.
+    Endpoint для входа пользователя.
+    """
     serializer = UserLoginSerializer(data=request.data, context={'request': request})
     if serializer.is_valid():
         user = serializer.validated_data['user']
         token, created = Token.objects.get_or_create(user=user)
         return Response({
-            'message': 'Вход выполнен успешно.',
+            'message': 'Login successful. / Вход выполнен успешно.',
             'token': token.key,
             'user': UserProfileSerializer(user).data
         }, status=status.HTTP_200_OK)
@@ -51,17 +58,23 @@ def login(request):
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def logout_view(request):
-    """Endpoint для выхода пользователя."""
+    """
+    User logout endpoint.
+    Endpoint для выхода пользователя.
+    """
     try:
         request.user.auth_token.delete()
     except Exception:
         pass
     logout(request)
-    return Response({'message': 'Выход выполнен успешно.'}, status=status.HTTP_200_OK)
+    return Response({'message': 'Logout successful. / Выход выполнен успешно.'}, status=status.HTTP_200_OK)
 
 
 class UserProfileView(generics.RetrieveAPIView):
-    """Получение профиля пользователя."""
+    """
+    Get user profile.
+    Получение профиля пользователя.
+    """
     serializer_class = UserProfileSerializer
     permission_classes = [IsAuthenticated]
     
@@ -70,7 +83,10 @@ class UserProfileView(generics.RetrieveAPIView):
 
 
 class UserUpdateView(generics.UpdateAPIView):
-    """Обновление профиля пользователя."""
+    """
+    Update user profile.
+    Обновление профиля пользователя.
+    """
     serializer_class = UserUpdateSerializer
     permission_classes = [IsAuthenticated]
     
@@ -80,7 +96,7 @@ class UserUpdateView(generics.UpdateAPIView):
     def update(self, request, *args, **kwargs):
         response = super().update(request, *args, **kwargs)
         return Response({
-            'message': 'Профиль успешно обновлен.',
+            'message': 'Profile updated successfully. / Профиль успешно обновлен.',
             'user': UserProfileSerializer(self.get_object()).data
         }, status=status.HTTP_200_OK)
 
@@ -88,7 +104,10 @@ class UserUpdateView(generics.UpdateAPIView):
 @api_view(['DELETE'])
 @permission_classes([IsAuthenticated])
 def delete_user(request):
-    """Мягкое удаление учетной записи пользователя."""
+    """
+    Soft delete user account.
+    Мягкое удаление учетной записи пользователя.
+    """
     user = request.user
     try:
         user.auth_token.delete()
@@ -98,6 +117,5 @@ def delete_user(request):
     user.is_active = False
     user.save()
     return Response({
-        'message': 'Учетная запись пользователя успешно удалена.'
+        'message': 'User account deleted successfully. / Учетная запись пользователя успешно удалена.'
     }, status=status.HTTP_200_OK)
-

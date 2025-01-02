@@ -1,4 +1,5 @@
 """
+Custom permission classes for access control.
 Кастомные классы разрешений для контроля доступа.
 """
 from rest_framework import permissions
@@ -7,6 +8,8 @@ from .models import Permission, UserRole
 
 class HasResourcePermission(permissions.BasePermission):
     """
+    Custom permission class that checks if user has permission
+    to perform an action on a resource.
     Кастомный класс разрешений, который проверяет наличие у пользователя права
     на выполнение действия над ресурсом.
     """
@@ -15,6 +18,9 @@ class HasResourcePermission(permissions.BasePermission):
     
     def has_permission(self, request, view):
         """
+        Check if user has permission to access the resource.
+        Gets resource_name and action_name from the permission class attributes
+        or from view attributes.
         Проверка наличия у пользователя права доступа к ресурсу.
         Получает resource_name и action_name из атрибутов класса разрешений
         или из атрибутов представления.
@@ -39,15 +45,17 @@ class HasResourcePermission(permissions.BasePermission):
 
 def check_user_permission(user, resource_name, action_name):
     """
+    Utility function to check if user has permission.
     Утилитная функция для проверки наличия у пользователя права.
     
     Args:
-        user: Экземпляр пользователя
-        resource_name: Имя ресурса
-        action_name: Имя действия
+        user: User instance / Экземпляр пользователя
+        resource_name: Name of the resource / Имя ресурса
+        action_name: Name of the action / Имя действия
     
     Returns:
-        bool: True если у пользователя есть право, False в противном случае
+        bool: True if user has permission, False otherwise
+        True если у пользователя есть право, False в противном случае
     """
     if not user or not user.is_authenticated:
         return False

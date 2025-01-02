@@ -1,4 +1,5 @@
 """
+Serializers for access app.
 Сериализаторы для приложения access.
 """
 from rest_framework import serializers
@@ -7,7 +8,10 @@ from users.models import User
 
 
 class ActionSerializer(serializers.ModelSerializer):
-    """Сериализатор для Action."""
+    """
+    Serializer for Action.
+    Сериализатор для Action.
+    """
     
     class Meta:
         model = Action
@@ -16,7 +20,10 @@ class ActionSerializer(serializers.ModelSerializer):
 
 
 class ResourceSerializer(serializers.ModelSerializer):
-    """Сериализатор для Resource."""
+    """
+    Serializer for Resource.
+    Сериализатор для Resource.
+    """
     
     class Meta:
         model = Resource
@@ -25,7 +32,10 @@ class ResourceSerializer(serializers.ModelSerializer):
 
 
 class RoleSerializer(serializers.ModelSerializer):
-    """Сериализатор для Role."""
+    """
+    Serializer for Role.
+    Сериализатор для Role.
+    """
     
     class Meta:
         model = Role
@@ -34,7 +44,10 @@ class RoleSerializer(serializers.ModelSerializer):
 
 
 class PermissionSerializer(serializers.ModelSerializer):
-    """Сериализатор для Permission."""
+    """
+    Serializer for Permission.
+    Сериализатор для Permission.
+    """
     role = RoleSerializer(read_only=True)
     resource = ResourceSerializer(read_only=True)
     action = ActionSerializer(read_only=True)
@@ -51,7 +64,10 @@ class PermissionSerializer(serializers.ModelSerializer):
         read_only_fields = ('id', 'created_at')
     
     def create(self, validated_data):
-        """Создание права доступа с role_id, resource_id, action_id."""
+        """
+        Create permission with role_id, resource_id, action_id.
+        Создание права доступа с role_id, resource_id, action_id.
+        """
         role_id = validated_data.pop('role_id')
         resource_id = validated_data.pop('resource_id')
         action_id = validated_data.pop('action_id')
@@ -68,7 +84,10 @@ class PermissionSerializer(serializers.ModelSerializer):
 
 
 class UserRoleSerializer(serializers.ModelSerializer):
-    """Сериализатор для UserRole."""
+    """
+    Serializer for UserRole.
+    Сериализатор для UserRole.
+    """
     user = serializers.SerializerMethodField()
     role = RoleSerializer(read_only=True)
     user_id = serializers.IntegerField(write_only=True, required=False)
@@ -80,7 +99,10 @@ class UserRoleSerializer(serializers.ModelSerializer):
         read_only_fields = ('id', 'assigned_at')
     
     def get_user(self, obj):
-        """Возвращает email и полное имя пользователя."""
+        """
+        Return user email and full name.
+        Возвращает email и полное имя пользователя.
+        """
         return {
             'id': obj.user.id,
             'email': obj.user.email,
@@ -88,7 +110,10 @@ class UserRoleSerializer(serializers.ModelSerializer):
         }
     
     def create(self, validated_data):
-        """Создание роли пользователя с user_id и role_id."""
+        """
+        Create user role with user_id and role_id.
+        Создание роли пользователя с user_id и role_id.
+        """
         user_id = validated_data.pop('user_id')
         role_id = validated_data.pop('role_id')
         
@@ -99,7 +124,10 @@ class UserRoleSerializer(serializers.ModelSerializer):
 
 
 class PermissionListSerializer(serializers.Serializer):
-    """Сериализатор для списка прав доступа с фильтрами."""
+    """
+    Serializer for listing permissions with filters.
+    Сериализатор для списка прав доступа с фильтрами.
+    """
     role_id = serializers.IntegerField(required=False)
     resource_id = serializers.IntegerField(required=False)
     action_id = serializers.IntegerField(required=False)

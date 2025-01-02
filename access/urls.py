@@ -1,4 +1,5 @@
 """
+URLs for access app.
 URL-маршруты для приложения access.
 """
 from django.urls import path, include

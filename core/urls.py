@@ -1,4 +1,5 @@
 """
+URL configuration for custom-auth-system project.
 Конфигурация URL для проекта custom-auth-system.
 """
 from django.contrib import admin

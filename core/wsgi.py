@@ -1,4 +1,5 @@
 """
+WSGI config for custom-auth-system project.
 Конфигурация WSGI для проекта custom-auth-system.
 """
 import os
