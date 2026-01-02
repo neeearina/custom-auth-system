@@ -1,4 +1,5 @@
 """
+User models for custom authentication system.
 Модели пользователей для кастомной системы аутентификации.
 """
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
@@ -6,12 +7,18 @@ from django.db import models
 
 
 class UserManager(BaseUserManager):
-    """Кастомный менеджер пользователей."""
+    """
+    Custom user manager.
+    Кастомный менеджер пользователей.
+    """
     
     def create_user(self, email, full_name, password=None, **extra_fields):
-        """Создание и сохранение обычного пользователя."""
+        """
+        Create and save a regular user.
+        Создание и сохранение обычного пользователя.
+        """
         if not email:
-            raise ValueError('Поле Email должно быть заполнено')
+            raise ValueError('The Email field must be set / Поле Email должно быть заполнено')
         email = self.normalize_email(email)
         user = self.model(email=email, full_name=full_name, **extra_fields)
         user.set_password(password)
@@ -19,20 +26,26 @@ class UserManager(BaseUserManager):
         return user
     
     def create_superuser(self, email, full_name, password=None, **extra_fields):
-        """Создание и сохранение суперпользователя."""
+        """
+        Create and save a superuser.
+        Создание и сохранение суперпользователя.
+        """
         extra_fields.setdefault('is_staff', True)
         extra_fields.setdefault('is_superuser', True)
         
         if extra_fields.get('is_staff') is not True:
-            raise ValueError('Суперпользователь должен иметь is_staff=True.')
+            raise ValueError('Superuser must have is_staff=True. / Суперпользователь должен иметь is_staff=True.')
         if extra_fields.get('is_superuser') is not True:
-            raise ValueError('Суперпользователь должен иметь is_superuser=True.')
+            raise ValueError('Superuser must have is_superuser=True. / Суперпользователь должен иметь is_superuser=True.')
         
         return self.create_user(email, full_name, password, **extra_fields)
 
 
 class User(AbstractBaseUser):
-    """Кастомная модель пользователя."""
+    """
+    Custom user model.
+    Кастомная модель пользователя.
+    """
     email = models.EmailField(unique=True, db_index=True)
     full_name = models.CharField(max_length=255)
     is_active = models.BooleanField(default=True)
@@ -48,17 +61,22 @@ class User(AbstractBaseUser):
     
     class Meta:
         db_table = 'users'
-        verbose_name = 'Пользователь'
-        verbose_name_plural = 'Пользователи'
+        verbose_name = 'User / Пользователь'
+        verbose_name_plural = 'Users / Пользователи'
     
     def __str__(self):
         return f'{self.full_name} ({self.email})'
     
     def has_perm(self, perm, obj=None):
-        """Проверка прав для Django admin."""
+        """
+        Django admin permission check.
+        Проверка прав для Django admin.
+        """
         return self.is_superuser
     
     def has_module_perms(self, app_label):
-        """Проверка прав для Django admin."""
+        """
+        Django admin permission check.
+        Проверка прав для Django admin.
+        """
         return self.is_superuser
-

@@ -1,4 +1,5 @@
 """
+Serializers for users app.
 Сериализаторы для приложения users.
 """
 from rest_framework import serializers
@@ -8,7 +9,10 @@ from .models import User
 
 
 class UserRegistrationSerializer(serializers.ModelSerializer):
-    """Сериализатор для регистрации пользователя."""
+    """
+    Serializer for user registration.
+    Сериализатор для регистрации пользователя.
+    """
     password = serializers.CharField(write_only=True, min_length=8)
     password_confirm = serializers.CharField(write_only=True, min_length=8)
     
@@ -17,15 +21,21 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
         fields = ('email', 'full_name', 'password', 'password_confirm')
     
     def validate(self, attrs):
-        """Проверка совпадения паролей."""
+        """
+        Validate that passwords match.
+        Проверка совпадения паролей.
+        """
         if attrs['password'] != attrs['password_confirm']:
             raise serializers.ValidationError({
-                'password_confirm': 'Пароли не совпадают.'
+                'password_confirm': 'Passwords do not match. / Пароли не совпадают.'
             })
         return attrs
     
     def create(self, validated_data):
-        """Создание нового пользователя."""
+        """
+        Create a new user.
+        Создание нового пользователя.
+        """
         validated_data.pop('password_confirm')
         user = User.objects.create_user(
             email=validated_data['email'],
@@ -37,12 +47,18 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
 
 
 class UserLoginSerializer(serializers.Serializer):
-    """Сериализатор для входа пользователя."""
+    """
+    Serializer for user login.
+    Сериализатор для входа пользователя.
+    """
     email = serializers.EmailField()
     password = serializers.CharField(write_only=True)
     
     def validate(self, attrs):
-        """Проверка учетных данных."""
+        """
+        Validate credentials.
+        Проверка учетных данных.
+        """
         email = attrs.get('email')
         password = attrs.get('password')
         
@@ -50,18 +66,21 @@ class UserLoginSerializer(serializers.Serializer):
             user = authenticate(request=self.context.get('request'),
                               username=email, password=password)
             if not user:
-                raise serializers.ValidationError('Неверный email или пароль.')
+                raise serializers.ValidationError('Invalid email or password. / Неверный email или пароль.')
             if not user.is_active:
-                raise serializers.ValidationError('Учетная запись пользователя отключена.')
+                raise serializers.ValidationError('User account is disabled. / Учетная запись пользователя отключена.')
             attrs['user'] = user
         else:
-            raise serializers.ValidationError('Необходимо указать "email" и "password".')
+            raise serializers.ValidationError('Must include "email" and "password". / Необходимо указать "email" и "password".')
         
         return attrs
 
 
 class UserProfileSerializer(serializers.ModelSerializer):
-    """Сериализатор для профиля пользователя."""
+    """
+    Serializer for user profile.
+    Сериализатор для профиля пользователя.
+    """
     
     class Meta:
         model = User
@@ -70,9 +89,11 @@ class UserProfileSerializer(serializers.ModelSerializer):
 
 
 class UserUpdateSerializer(serializers.ModelSerializer):
-    """Сериализатор для обновления профиля пользователя."""
+    """
+    Serializer for updating user profile.
+    Сериализатор для обновления профиля пользователя.
+    """
     
     class Meta:
         model = User
         fields = ('full_name',)
-

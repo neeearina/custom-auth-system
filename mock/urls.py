@@ -1,4 +1,5 @@
 """
+URLs for mock app.
 URL-маршруты для приложения mock.
 """
 from django.urls import path

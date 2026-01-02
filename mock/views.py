@@ -1,4 +1,5 @@
 """
+Mock views for testing access control.
 Mock представления для тестирования контроля доступа.
 """
 from rest_framework import status
@@ -9,13 +10,19 @@ from access.permissions import HasResourcePermission
 
 
 class ProjectsPermission(HasResourcePermission):
-    """Класс разрешений для ресурса projects."""
+    """
+    Permission class for projects resource.
+    Класс разрешений для ресурса projects.
+    """
     resource_name = 'projects'
     action_name = 'read'
 
 
 class ReportsPermission(HasResourcePermission):
-    """Класс разрешений для ресурса reports."""
+    """
+    Permission class for reports resource.
+    Класс разрешений для ресурса reports.
+    """
     resource_name = 'reports'
     action_name = 'read'
 
@@ -23,7 +30,10 @@ class ReportsPermission(HasResourcePermission):
 @api_view(['GET'])
 @permission_classes([IsAuthenticated, ProjectsPermission])
 def mock_projects(request):
-    """Mock endpoint для ресурса projects."""
+    """
+    Mock endpoint for projects resource.
+    Mock endpoint для ресурса projects.
+    """
     mock_data = [
         {
             'id': 1,
@@ -57,7 +67,10 @@ def mock_projects(request):
 @api_view(['GET'])
 @permission_classes([IsAuthenticated, ReportsPermission])
 def mock_reports(request):
-    """Mock endpoint для ресурса reports."""
+    """
+    Mock endpoint for reports resource.
+    Mock endpoint для ресурса reports.
+    """
     mock_data = [
         {
             'id': 1,

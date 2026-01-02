@@ -1,138 +1,138 @@
 # Custom Authentication & Authorization System
 
-Backend-приложение на Django REST Framework с кастомной системой аутентификации и авторизации. Проект реализует собственную модель разграничения доступа, не полностью основанную на стандартных механизмах Django (Groups/Permissions).
+Backend application on Django REST Framework with custom authentication and authorization system. The project implements its own access control model, not fully based on standard Django mechanisms (Groups/Permissions).
 
-## Описание проекта
+## Project Description
 
-Этот сервис представляет собой REST API для управления пользователями и контроля доступа к ресурсам. Основная особенность — кастомная система авторизации, которая позволяет гибко настраивать права доступа через роли, ресурсы и действия.
+This service is a REST API for user management and resource access control. The main feature is a custom authorization system that allows flexible access rights configuration through roles, resources, and actions.
 
-### Что решает проект
+### What the project solves
 
-- **Аутентификация пользователей**: регистрация, вход, выход, управление профилем
-- **Кастомная авторизация**: гибкая система прав доступа на основе ролей
-- **Управление доступом**: административный API для настройки прав
-- **Тестирование доступа**: mock endpoints для проверки работы системы
+- **User authentication**: registration, login, logout, profile management
+- **Custom authorization**: flexible role-based access control system
+- **Access management**: administrative API for rights configuration
+- **Access testing**: mock endpoints for system testing
 
-### Кастомная авторизация
+### Custom Authorization
 
-Вместо стандартных Django Groups/Permissions используется собственная модель:
-- **Role** (Роль) — определяет группу пользователей (admin, user и т.д.)
-- **Resource** (Ресурс) — объект, к которому нужен доступ (projects, reports и т.д.)
-- **Action** (Действие) — операция, которую можно выполнить (read, create, update, delete)
-- **Permission** (Право) — правило: роль может выполнить действие над ресурсом
+Instead of standard Django Groups/Permissions, a custom model is used:
+- **Role** — defines a group of users (admin, user, etc.)
+- **Resource** — object that requires access (projects, reports, etc.)
+- **Action** — operation that can be performed (read, create, update, delete)
+- **Permission** — rule: role can perform action on resource
 
-## Схема системы доступа
+## Access Control Schema
 
-### Роли (Roles)
+### Roles
 
-Роль определяет группу пользователей с определенными правами:
+Role defines a group of users with specific rights:
 
-- **admin** — администратор с полным доступом ко всем ресурсам
-- **user** — обычный пользователь с ограниченными правами
+- **admin** — administrator with full access to all resources
+- **user** — regular user with limited rights
 
-### Ресурсы (Resources)
+### Resources
 
-Ресурс — это объект или группа объектов, к которым нужен доступ:
+Resource is an object or group of objects that require access:
 
-- **projects** — проекты
-- **reports** — отчеты
-- **access** — управление системой доступа (только для админов)
+- **projects** — projects
+- **reports** — reports
+- **access** — access control system management (admin only)
 
-### Действия (Actions)
+### Actions
 
-Действие — это операция, которую можно выполнить над ресурсом:
+Action is an operation that can be performed on a resource:
 
-- **read** — просмотр/чтение
-- **create** — создание
-- **update** — обновление
-- **delete** — удаление
-- **admin** — административные действия
+- **read** — view/read
+- **create** — create
+- **update** — update
+- **delete** — delete
+- **admin** — administrative actions
 
-### Правила доступа (Permissions)
+### Permission Rules
 
-Правило связывает роль, ресурс и действие. Например:
+Rule links role, resource, and action. For example:
 
-- `admin` может `read` `projects` 
-- `admin` может `create` `projects` 
-- `user` может `read` `projects` 
+- `admin` can `read` `projects` 
+- `admin` can `create` `projects` 
+- `user` can `read` `projects` 
 
-### Проверка доступа
+### Access Check
 
-1. Пользователь должен быть аутентифицирован (иметь валидный токен)
-2. Система проверяет роли пользователя
-3. Для каждой роли проверяются права на ресурс и действие
-4. Если право найдено — доступ разрешен (200 OK)
-5. Если пользователь не аутентифицирован — 401 Unauthorized
-6. Если пользователь аутентифицирован, но нет прав — 403 Forbidden
+1. User must be authenticated (have valid token)
+2. System checks user roles
+3. For each role, rights to resource and action are checked
+4. If right is found — access granted (200 OK)
+5. If user is not authenticated — 401 Unauthorized
+6. If user is authenticated but has no rights — 403 Forbidden
 
-## Запуск проекта
+## Project Setup
 
-### Локально
+### Local Setup
 
-1. **Клонируйте репозиторий**:
+1. **Clone the repository**:
 ```bash
 git clone <repository-url>
 cd custom-auth-system
 ```
 
-2. **Создайте виртуальное окружение**:
+2. **Create virtual environment**:
 ```bash
 python -m venv venv
-source venv/bin/activate 
+source venv/bin/activate
 ```
 
-3. **Установите зависимости**:
+3. **Install dependencies**:
 ```bash
 pip install -r requirements.txt
 ```
 
-4. **Создайте файл .env и отредактируйте его**:
+4. **Create .env file and edit it**:
 ```bash
 cp .env-example .env
 ```
 
-5. **Создайте миграции**:
+5. **Create migrations**:
 ```bash
 python manage.py makemigrations
 ```
 
-6. **Примените миграции** (создаст таблицы в базе данных):
+6. **Apply migrations** (creates database tables):
 ```bash
 python manage.py migrate
 ```
 
-**Важно**: Миграции должны быть применены перед загрузкой фикстур, иначе возникнет ошибка `no such table`.
+**Important**: Migrations must be applied before loading fixtures, otherwise you will get `no such table` error.
 
-7. **Загрузите тестовые данные**:
+7. **Load test data**:
 ```bash
 python manage.py loaddata access/fixtures/initial_data.json
 ```
 
-8. **Создайте суперпользователя** (опционально):
+8. **Create superuser** (optional):
 ```bash
 python manage.py createsuperuser
 ```
 
-9. **Запустите сервер**:
+9. **Run server**:
 ```bash
 python manage.py runserver
 ```
 
-Сервер будет доступен по адресу: http://localhost:8000
+Server will be available at: http://localhost:8000
 
-### Через Docker
+### Docker Setup
 
-1. **Соберите образ**:
+1. **Build image**:
 ```bash
 docker build -t auth-app .
 ```
 
-2. **Запустите контейнер**:
+2. **Run container**:
 ```bash
 docker run -p 8000:8000 --env-file .env auth-app
 ```
 
-Или используйте переменные окружения напрямую:
+Or use environment variables directly:
 ```bash
 docker run -p 8000:8000 \
   -e SECRET_KEY=your-secret-key \
@@ -141,9 +141,9 @@ docker run -p 8000:8000 \
   auth-app
 ```
 
-## Примеры API-запросов
+## API Examples
 
-### Регистрация
+### Registration
 
 ```bash
 curl -X POST http://localhost:8000/api/users/register/ \
@@ -156,7 +156,7 @@ curl -X POST http://localhost:8000/api/users/register/ \
   }'
 ```
 
-**Ответ**:
+**Response**:
 ```json
 {
   "message": "User registered successfully.",
@@ -182,7 +182,7 @@ curl -X POST http://localhost:8000/api/users/login/ \
   }'
 ```
 
-**Ответ**:
+**Response**:
 ```json
 {
   "message": "Login successful.",
@@ -197,14 +197,14 @@ curl -X POST http://localhost:8000/api/users/login/ \
 }
 ```
 
-### Запрос к защищенному ресурсу (с токеном)
+### Request to Protected Resource (with token)
 
 ```bash
 curl -X GET http://localhost:8000/api/mock/projects/ \
   -H "Authorization: Token 9944b09199c62bcf9418ad846dd0e4bbdfc6ee4b"
 ```
 
-**Ответ (если есть права)**:
+**Response (if has rights)**:
 ```json
 {
   "message": "Access granted to projects",
@@ -221,31 +221,31 @@ curl -X GET http://localhost:8000/api/mock/projects/ \
 }
 ```
 
-### Пример ошибки 401 (не аутентифицирован)
+### Example 401 Error (not authenticated)
 
 ```bash
 curl -X GET http://localhost:8000/api/mock/projects/
 ```
 
-**Ответ**:
+**Response**:
 ```json
 {
   "detail": "Authentication credentials were not provided."
 }
 ```
 
-### Пример ошибки 403 (нет прав)
+### Example 403 Error (no rights)
 
-Если пользователь не имеет права на доступ к ресурсу:
+If user doesn't have access rights to resource:
 
-**Ответ**:
+**Response**:
 ```json
 {
   "detail": "You do not have permission to perform this action."
 }
 ```
 
-### Обновление профиля
+### Update Profile
 
 ```bash
 curl -X PATCH http://localhost:8000/api/users/profile/update/ \
@@ -263,54 +263,55 @@ curl -X POST http://localhost:8000/api/users/logout/ \
   -H "Authorization: Token 9944b09199c62bcf9418ad846dd0e4bbdfc6ee4b"
 ```
 
-### Удаление пользователя (soft delete)
+### Delete User (soft delete)
 
 ```bash
 curl -X DELETE http://localhost:8000/api/users/delete/ \
   -H "Authorization: Token 9944b09199c62bcf9418ad846dd0e4bbdfc6ee4b"
 ```
-## Особенности реализации
+
+## Implementation Details
 
 ### Soft Delete
 
-При удалении пользователя:
-- Токен удаляется (logout)
-- Поле `is_active` устанавливается в `False`
-- Пользователь не может войти снова
-- Запись в БД сохраняется
+When deleting a user:
+- Token is deleted (logout)
+- `is_active` field is set to `False`
+- User cannot login again
+- Database record is preserved
 
-### Кастомная проверка прав
+### Custom Rights Check
 
-Используется класс `HasResourcePermission`, который:
-1. Проверяет аутентификацию пользователя
-2. Получает роли пользователя из таблицы `UserRole`
-3. Проверяет наличие права через связь `Role → Permission → Resource + Action`
-4. Возвращает `True` если право найдено, иначе `False`
+Uses `HasResourcePermission` class that:
+1. Checks user authentication
+2. Gets user roles from `UserRole` table
+3. Checks for permission through `Role → Permission → Resource + Action` relationship
+4. Returns `True` if permission found, otherwise `False`
 
 ### Permission Classes
 
-- `IsAuthenticated` — стандартная проверка аутентификации DRF
-- `HasResourcePermission` — кастомная проверка прав доступа
-- `IsAdminPermission` — проверка наличия роли admin для административных операций
+- `IsAuthenticated` — standard DRF authentication check
+- `HasResourcePermission` — custom access rights check
+- `IsAdminPermission` — check for admin role for administrative operations
 
 ### Middleware
 
-Используются стандартные middleware Django:
-- `AuthenticationMiddleware` — для работы с токенами
-- `SessionMiddleware` — для сессий (опционально)
+Standard Django middleware is used:
+- `AuthenticationMiddleware` — for token handling
+- `SessionMiddleware` — for sessions (optional)
 
-## Административный API
+## Administrative API
 
-Все административные endpoints требуют роль `admin` и права `access:admin`.
+All administrative endpoints require `admin` role and `access:admin` permission.
 
-### Получить список ролей
+### Get Roles List
 
 ```bash
 curl -X GET http://localhost:8000/api/access/roles/ \
   -H "Authorization: Token <admin-token>"
 ```
 
-### Создать правило доступа
+### Create Permission Rule
 
 ```bash
 curl -X POST http://localhost:8000/api/access/permissions/ \
@@ -323,7 +324,7 @@ curl -X POST http://localhost:8000/api/access/permissions/ \
   }'
 ```
 
-### Назначить роль пользователю
+### Assign Role to User
 
 ```bash
 curl -X POST http://localhost:8000/api/access/user-roles/ \
@@ -335,15 +336,16 @@ curl -X POST http://localhost:8000/api/access/user-roles/ \
   }'
 ```
 
-### Получить обзор системы доступа
+### Get Access Control System Overview
 
 ```bash
 curl -X GET http://localhost:8000/api/access/overview/ \
   -H "Authorization: Token <admin-token>"
 ```
-## Безопасность
 
-- Пароли хранятся в хешированном виде (Django default)
-- Токены используются для аутентификации
-- Soft delete предотвращает потерю данных
-- Проверка прав на уровне API endpoints
+## Security
+
+- Passwords are stored in hashed form (Django default)
+- Tokens are used for authentication
+- Soft delete prevents data loss
+- Rights check at API endpoints level
