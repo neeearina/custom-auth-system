@@ -1,0 +1,178 @@
+[
+  {
+    "model": "access.role",
+    "pk": 1,
+    "fields": {
+      "name": "admin",
+      "description": "Administrator role with full access",
+      "created_at": "2024-01-01T00:00:00Z",
+      "updated_at": "2024-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "access.role",
+    "pk": 2,
+    "fields": {
+      "name": "user",
+      "description": "Regular user role with limited access",
+      "created_at": "2024-01-01T00:00:00Z",
+      "updated_at": "2024-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "access.resource",
+    "pk": 1,
+    "fields": {
+      "name": "projects",
+      "description": "Projects resource",
+      "created_at": "2024-01-01T00:00:00Z",
+      "updated_at": "2024-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "access.resource",
+    "pk": 2,
+    "fields": {
+      "name": "reports",
+      "description": "Reports resource",
+      "created_at": "2024-01-01T00:00:00Z",
+      "updated_at": "2024-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "access.resource",
+    "pk": 3,
+    "fields": {
+      "name": "access",
+      "description": "Access control management resource",
+      "created_at": "2024-01-01T00:00:00Z",
+      "updated_at": "2024-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "access.action",
+    "pk": 1,
+    "fields": {
+      "name": "read",
+      "description": "Read/view action",
+      "created_at": "2024-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "access.action",
+    "pk": 2,
+    "fields": {
+      "name": "create",
+      "description": "Create action",
+      "created_at": "2024-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "access.action",
+    "pk": 3,
+    "fields": {
+      "name": "update",
+      "description": "Update action",
+      "created_at": "2024-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "access.action",
+    "pk": 4,
+    "fields": {
+      "name": "delete",
+      "description": "Delete action",
+      "created_at": "2024-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "access.action",
+    "pk": 5,
+    "fields": {
+      "name": "admin",
+      "description": "Administrative action",
+      "created_at": "2024-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "access.permission",
+    "pk": 1,
+    "fields": {
+      "role": 1,
+      "resource": 1,
+      "action": 1,
+      "created_at": "2024-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "access.permission",
+    "pk": 2,
+    "fields": {
+      "role": 1,
+      "resource": 1,
+      "action": 2,
+      "created_at": "2024-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "access.permission",
+    "pk": 3,
+    "fields": {
+      "role": 1,
+      "resource": 1,
+      "action": 3,
+      "created_at": "2024-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "access.permission",
+    "pk": 4,
+    "fields": {
+      "role": 1,
+      "resource": 1,
+      "action": 4,
+      "created_at": "2024-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "access.permission",
+    "pk": 5,
+    "fields": {
+      "role": 1,
+      "resource": 2,
+      "action": 1,
+      "created_at": "2024-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "access.permission",
+    "pk": 6,
+    "fields": {
+      "role": 1,
+      "resource": 2,
+      "action": 2,
+      "created_at": "2024-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "access.permission",
+    "pk": 7,
+    "fields": {
+      "role": 1,
+      "resource": 3,
+      "action": 5,
+      "created_at": "2024-01-01T00:00:00Z"
+    }
+  },
+  {
+    "model": "access.permission",
+    "pk": 8,
+    "fields": {
+      "role": 2,
+      "resource": 1,
+      "action": 1,
+      "created_at": "2024-01-01T00:00:00Z"
+    }
+  }
+]
+
